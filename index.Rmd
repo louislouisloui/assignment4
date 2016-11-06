@@ -1,0 +1,54 @@
+---
+title: "assignment4"
+author: "Louis Duverger"
+date: "6/11/2016"
+output: ioslides_presentation
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warnings = FALSE)
+```
+
+## Introduction
+
+For this study, we will use the mtcars data set and ones of its favariables.
+
+The purpose of this presentation is to study the impact of the cylinders on the evolution of the miles per galon by horse power. 
+
+First we will see how the cylinders are mapped to the clusters of mpg/hp. Then we will see if this clusters tend to show any linear pattern.
+
+## Clusters
+
+Lets see on one hand, how miles per gallon and horsepower are related, and how miles per galon are related to cylinders on the other hand.
+
+```{r, eval= TRUE, echo=FALSE}
+library(plotly)
+library(dplyr)
+a <- plot_ly(data = mtcars, x = ~hp, y = ~mpg, type = "scatter", mode = "markers")
+b <- plot_ly(data = mtcars, y = ~mpg, color = ~(as.factor(cyl)), type = "box") %>% layout(title = "Mpg by hp (left), Mpg by cyl(right)")
+subplot(a,b)
+```
+
+
+## Cluster and tendance
+
+```{r, eval = TRUE, echo=FALSE}
+model <-  lm(data = mtcars, mpg ~hp*I(as.factor(cyl))-1)
+model$coefficients[1:4]
+```
+
+We can see that the different number of cylinders have an impact. Furthermore they seem to be significant looking at their p-value.
+
+```{r}
+summary(model)$coef[1:4,]
+```
+
+
+## All combined
+```{r}
+library(ggplot2)
+g <- ggplot(data=mtcars, aes(x=hp,y=mpg, color = as.factor(cyl)))+geom_point()+geom_smooth(method = "lm", se=FALSE)
+ggplotly(g)
+```
+
+Now, feel free to use the Shiny app I made to play more fluidly with this plot.
