@@ -45,7 +45,7 @@ summary(model)$coef[1:4,]
 
 
 ## All combined
-```{r}
+```{r, echo = TRUE}
 library(ggplot2)
 g <- ggplot(data=mtcars, aes(x=hp,y=mpg, color = as.factor(cyl)))+geom_point()+geom_smooth(method = "lm", se=FALSE)
 ggplotly(g)
